@@ -53,3 +53,7 @@ The x values are the feature values for a particular example.
 Logistic regression models are trained using the same process as linear regression models, with two key distinctions:
 - Logistic regression models use Log Loss as the loss function instead of squared loss.
 - Applying regularization is critical to prevent overfitting.
+
+Most logistic regression models use one of the following two strategies to decrease model complexity:
+- L2 regularization
+- Early stopping: Limiting the number of training steps to halt training while loss is still decreasing.
