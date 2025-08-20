@@ -164,3 +164,42 @@ When one variable is related to the square, cube, or other power of another vari
 x = x2
 
 y = b + w1x1 + w2x2
+
+---
+
+## Categorical data
+
+**Encoding** means converting categorical or other data to numerical vectors that a model can train on. 
+
+The term **dimension** is a synonym for the number of elements in a feature vector.
+
+When a categorical feature has a low number of possible categories, you can encode it as a **vocabulary**. With a vocabulary encoding, the model treats each possible categorical value as a separate feature. During training, the model learns different weights for each category.
+
+The next step in building a vocabulary is to convert each index number to its **one-hot encoding**. In a one-hot encoding:
+- Each category is represented by a vector (array) of N elements, where N is the number of categories. For example, if car_color has eight possible categories, then the one-hot vector representing will have eight elements. \[0,1,0,0,0,0,0,0\]
+- Exactly one of the elements in a one-hot vector has the value 1.0; all the remaining elements have the value 0.0.
+
+A feature whose values are predominantly zero (or empty) is termed a **sparse feature**. Ordinal encoding (integer labels): \[1\]
+
+You can lump outliers into a single "catch-all" category called **out-of-vocabulary (OOV)**.
+
+**Embeddings** substantially reduce the number of dimensions, which benefits models in two important ways:
+- The model typically trains faster.
+- The built model typically infers predictions more quickly. That is, the model has lower latency.
+
+**Hashing** (also called the hashing trick) is a less common way to reduce the number of dimensions.
+
+Data manually labeled by human beings is often referred to as **gold labels**, and is considered more desirable than machine-labeled data for training models, due to relatively better data quality.
+
+The difference between human raters' decisions is called **inter-rater agreement**. These can be measured through:
+- Cohen's kappa and variants
+- Intra-class correlation (ICC)
+- Krippendorff's alpha
+
+Machine-labeled data, where categories are automatically determined by one or more classification models, is often referred to as **silver labels**. 
+
+Categorical data tends to produce **high-dimensional** feature vectors; that is, feature vectors having a large number of elements.
+
+**Feature crosses** are created by crossing (taking the Cartesian product of) two or more categorical or bucketed features of the dataset. Feature crosses are somewhat analogous to Polynomial transforms. Both combine multiple features into a new synthetic feature that the model can train on to learn nonlinearities. Domain knowledge can suggest a useful combination of features to cross.
+
+[Playground](https://playground.tensorflow.org/#activation=tanh&batchSize=10&dataset=circle&regDataset=reg-plane&learningRate=0.03&regularizationRate=0&noise=0&networkShape=4,2&seed=0.14938&showTestData=false&discretize=false&percTrainData=50&x=true&y=true&xTimesY=false&xSquared=false&ySquared=false&cosX=false&sinX=false&cosY=false&sinY=false&collectStats=false&problem=classification&initZero=false&hideText=false) is an interactive application that lets you manipulate various aspects of training and testing a machine learning model. 
