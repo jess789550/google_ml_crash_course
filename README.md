@@ -12,7 +12,7 @@ https://developers.google.com/machine-learning/crash-course/
 ---
 
 ### Linear Regression
-**Gradient descent** is an iterative process that finds the best weights and bias that minimize the loss.
+**Gradient descent** is an iterative process that finds the best weights and bias that minimise the loss.
 
 **Hyperparameters** are variables that control different aspects of training. Three common hyperparameters are:
 - Learning rate
@@ -43,7 +43,7 @@ f(x) = 1/(1+e^(-x))
 
 Transforming linear output using the sigmoid function:
 
-z = b + w1x1 + w2x2 + ... +wNxN
+z = b + w1x1 + w2x2 + ... + wNxN
 
 z is the output of the linear equation, also called the log odds.
 b is the bias.
@@ -55,7 +55,7 @@ Logistic regression models are trained using the same process as linear regressi
 - Applying **regularization** is critical to prevent overfitting.
 
 Most logistic regression models use one of the following two strategies to decrease model complexity:
-- **L2 regularization**
+- **L2 regularisation**
 - **Early stopping**: Limiting the number of training steps to halt training while loss is still decreasing.
 
 ---
@@ -203,3 +203,139 @@ Categorical data tends to produce **high-dimensional** feature vectors; that is,
 **Feature crosses** are created by crossing (taking the Cartesian product of) two or more categorical or bucketed features of the dataset. Feature crosses are somewhat analogous to Polynomial transforms. Both combine multiple features into a new synthetic feature that the model can train on to learn nonlinearities. Domain knowledge can suggest a useful combination of features to cross.
 
 [Playground](https://playground.tensorflow.org/#activation=tanh&batchSize=10&dataset=circle&regDataset=reg-plane&learningRate=0.03&regularizationRate=0&noise=0&networkShape=4,2&seed=0.14938&showTestData=false&discretize=false&percTrainData=50&x=true&y=true&xTimesY=false&xSquared=false&ySquared=false&cosX=false&sinX=false&cosY=false&sinY=false&collectStats=false&problem=classification&initZero=false&hideText=false) is an interactive application that lets you manipulate various aspects of training and testing a machine learning model. 
+
+---
+
+## Datasets, generalisation, and overfitting
+
+A dataset is a collection of examples.
+
+Types of data
+- numerical data
+- categorical data
+- human language
+- multimedia
+- outputs from other ML systems
+- embedding vectors
+
+Models trained on large datasets with few features generally outperform models trained on small datasets with a lot of features.
+
+A high-quality dataset helps your model accomplish its goal. A low quality dataset inhibits your model from accomplishing its goal.
+
+**Reliability** refers to the degree to which you can trust your data.
+
+In measuring reliability, you must determine:
+- How common are label errors?
+- Are your features noisy?
+- Is the data properly filtered for your problem?
+
+The following are common causes of unreliable data in datasets:
+- Omitted values	
+- Duplicate examples	
+- Bad feature values
+- Bad labels
+- Bad sections of data
+
+Don't train a model on incomplete examples. Instead, fix or eliminate incomplete examples by doing one of the following:
+- Delete incomplete examples
+- Impute missing values
+
+A good dataset tells the model which values are imputed and which are actual.
+
+One common algorithm is to use the mean or median as the imputed value. 
+
+Types of labels:
+- **Direct labels**, which are labels identical to the prediction your model is trying to make.
+- **Proxy labels**, which are labels that are similar
+
+Human-generated data
+| Advantages | Disadvantages |
+| --- | --- |
+| Human raters can perform a wide range of tasks that even sophisticated machine learning models may find difficult. | You typically pay human raters, so human-generated data can be expensive. |
+| The process forces the owner of the dataset to develop clear and consistent criteria. | To err is human. Therefore, multiple human raters might have to evaluate the same data. |
+
+In a **balanced** dataset, the number of Positive and Negative labels is about equal. However, if one label is more common than the other label, then the dataset is **imbalanced**. The predominant label in an imbalanced dataset is called the **majority class**; the less common label is called the **minority class**.
+
+One way to handle an imbalanced dataset is to downsample and upweight the majority class. Here are the definitions of those two new terms:
+- **Downsampling** (in this context) means training on a disproportionately low subset of the majority class examples.
+- **Upweighting** means adding an example weight to the downsampled class equal to the factor by which you downsampled.
+
+Upweighting the minority class tends to increase prediction bias.
+
+Downsampling and upweighting majority class:
+- Faster convergence
+- Less disk space
+
+Rebalancing ratio depends on:
+- The batch size
+- The imbalance ratio
+- The number of examples in the training set
+
+Split original dataset:
+- A training set that the model trains on.
+- A validation set performs the initial testing on the model as it is being trained.
+- A test set for evaluation of the trained model.
+
+In summary, a good test set or validation set meets all of the following criteria:
+- Large enough to yield statistically significant testing results.
+- Representative of the dataset as a whole.
+- Representative of the real-world data that the model will encounter as part of its business purpose.
+- Zero examples duplicated in the training set.
+
+When the dataset contains too many examples, you must select a subset of examples for training. When possible, select the subset that is most relevant to your model's predictions.
+
+Good datasets omit examples containing Personally Identifiable Information (PII).
+
+**Overfitting** means creating a model that matches (memorizes) the training set so closely that the model fails to make correct predictions on new data. Causes:
+- The training set doesn't adequately represent real life data (or the validation set or test set).
+- The model is too complex.
+
+An **underfit** model doesn't even make good predictions on the training data.
+
+**Generalisation** is the opposite of overfitting. That is, a model that generalizes well makes good predictions on new data. Dataset conditions:
+- Examples must be independently and identically distributed.
+- The dataset is stationary, meaning the dataset doesn't change significantly over time.
+- The dataset partitions have the same distribution.
+
+The following curves help you detect overfitting:
+- loss curves
+- generalisation curves
+
+Penalising complex models is one form of **regularisation**.
+
+Your model should find a reasonable compromise between loss and complexity which are inversely related.
+
+**L1 regularisation** accounts for the weights in a model whereas **L2 regularisation** accounts for the sqaure of the weights in a model.
+
+**L2 regularisation** is a popular regularization metric, which uses the following formula:
+
+L2 = w1^2 + w2^2 + ... + wn^2
+
+L2 regularisation encourages weights toward 0, but never pushes weights all the way to zero.
+
+Model developers tune the overall impact of complexity on model training by multiplying its value by a scalar called the **regularisation rate**:
+
+minimise(loss + lambda*complexity)
+
+A high regularization rate:
+- Strengthens the influence of regularization, thereby reducing the chances of overfitting.
+- Tends to produce a histogram of model weights having the following characteristics:
+  - a normal distribution
+  - a mean weight of 0.
+
+A low regularization rate:
+- Lowers the influence of regularization, thereby increasing the chances of overfitting.
+- Tends to produce a histogram of model weights with a flat distribution.
+
+Picking regularisation rate:
+- Early stopping is a regularisation method that doesn't involve a calculation of complexity. Instead, early stopping simply means ending training before the model fully converges.
+- Finding equilibrium between learning rate and regularization rate. Learning rate and regularisation rate tend to pull weights in opposite directions. A high learning rate often pulls weights away from zero; a high regularisation rate pulls weights towards zero.
+
+Loss curves
+| Issue | Fix |
+| --- | --- |
+| Oscilatting | Reduce training set, reduce learning rate, remove bad examples |
+| Sharp jump | Remove NaNs and outliers |
+| Divergance of train/test | Simplify model and increase regularisation rate, make sure both are representative datasets that are statistically equivalent |
+| Gets stuck | Shuffle training set |
+
