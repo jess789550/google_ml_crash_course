@@ -13,7 +13,7 @@ https://developers.google.com/machine-learning/crash-course/
 
 ### Linear Regression
 
-<img src="car-data-points-with-model.png">
+<img src="images/car-data-points-with-model.png">
 
 **Gradient descent** is an iterative process that finds the best weights and bias that minimise the loss.
 
@@ -53,7 +53,7 @@ b is the bias.
 The w values are the model's learned weights.
 The x values are the feature values for a particular example.
 
-<img src="sigmoid_function_with_axes.png">
+<img src="images/sigmoid_function_with_axes.png">
 
 Logistic regression models are trained using the same process as linear regression models, with two key distinctions:
 - Logistic regression models use **Log Loss** as the loss function instead of squared loss.
@@ -90,7 +90,7 @@ Precision is the proportion of all the model's positive classifications that are
 
 The ROC curve is a visual representation of model performance across all thresholds. The ROC curve is drawn by calculating the true positive rate (TPR) and false positive rate (FPR) at every possible threshold (in practice, at selected intervals), then graphing TPR over FPR. A perfect model, which at some threshold has a TPR of 1.0 and a FPR of 0.0, can be represented by either a point at (0, 1).
 
-<img src="auc_abc.png">
+<img src="images/auc_abc.png">
 
 The area under the ROC curve (AUC) represents the probability that the model, if given a randomly chosen positive and negative example, will rank the positive higher than the negative. The perfect model above, containing a square with sides of length 1, has an area under the curve (AUC) of 1.0. For a binary classifier, a model that does exactly as well as random guesses or coin flips has a ROC that is a diagonal line from (0,0) to (1,1). The AUC is 0.5, representing a 50% probability of correctly ranking a random positive and negative example. AUC is a useful measure for comparing the performance of two different models, as long as the dataset is roughly balanced.
 
@@ -153,7 +153,7 @@ x' = ln(x)
 - The overall linear relationship between the feature and the label is weak or nonexistent.
 - When the feature values are clustered.
 
-<img src="binning_temperature_vs_shoppers_divided_into_3_bins.png">
+<img src="images/binning_temperature_vs_shoppers_divided_into_3_bins.png">
 
 **Quantile bucketing** creates bucketing boundaries such that the number of examples in each bucket is exactly or nearly equal. Quantile bucketing mostly hides the outliers.
 
@@ -310,7 +310,7 @@ The following curves help you detect overfitting:
 - loss curves
 - generalisation curves
 
-<img src="RegularizationTwoLossFunctions.png">
+<img src="images/RegularizationTwoLossFunctions.png">
 
 Penalising complex models is one form of **regularisation**.
 
@@ -395,13 +395,13 @@ LSTM = A type of cell in a **recurrent neural network** (RNN) used to process se
 
 **One-vs.-all** provides a way to use binary classification for a series of yes or no predictions across multiple possible labels. Given a classification problem with N possible solutions, a one-vs.-all solution consists of N separate binary classifiers—one binary classifier for each possible outcome. During training, the model runs through a sequence of binary classifiers, training each to answer a separate classification question. In a one-vs.-all approach, the probability of each binary set of outcomes is determined independently of all the other sets.
 
-<img src="one_vs_all_neural_net.png">
+<img src="images/one_vs_all_neural_net.png">
 
 For one-vs.-all, we applied the sigmoid activation function to each output node independently, which resulted in an output value between 0 and 1 for each node, but did not guarantee that these values summed to exactly 1.
 
 For one-vs.-one, we can instead apply a function called **softmax**, which assigns decimal probabilities to each class in a multi-class problem such that all probabilities add up to 1.0. This additional constraint helps training converge more quickly than it otherwise would. In order to perform softmax, the hidden layer directly preceding the output layer (called the softmax layer) must have the same number of nodes as the output layer.
 
-<img src="one_vs_one_neural_net.png">
+<img src="images/one_vs_one_neural_net.png">
 
 **Full softmax** is the softmax we've been discussing; that is, softmax calculates a probability for every possible class.
 
