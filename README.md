@@ -413,18 +413,23 @@ Softmax must only be used when each example is a member of exactly 1 class. Othe
 
 ## Embeddings
 
-Pitfalls of sparse data representations
+Pitfalls of sparse data representations (one-hot vectors)
 - Number of weights
 - Number of datapoints
 - Amount of computation
 - Amount of memory
 - Difficulty of supporting on-device machine learning (ODML)
 
-An **embedding** is a vector representation of data in embedding space. An embedding represents each item in n-dimensional space with n floating-point numbers (typically in the range –1 to 1 or 0 to 1).
+An **embedding** is a vector representation of data in embedding space. An embedding represents each item in n-dimensional space with n floating-point numbers (typically in the range –1 to 1 or 0 to 1). Generally speaking, a model finds potential embeddings by projecting the high-dimensional space of initial data vectors into a *lower-dimensional* space.
 
 <img src="images/embeddings_3D_tangyuan.png">
 
-In the real world, embedding spaces are d-dimensional, where d is much higher than 3. For word embeddings, d is often 256, 512, or 1024.
+In the real world, embedding spaces are d-dimensional, where d is much higher than 3. However, d will be lower than the dimensionality of the data, and relationships between data points are not necessarily intuitive. For word embeddings, d is often 256, 512, or 1024.
+
+Real world examples
+- Genomic sequencies of simple viruses: genome vs nucleotide
+- Photos of horses: number of pixels, sharpes, colours, patterns
+- Lines of code: length, class, type
 
 **word2vec** trains on a corpus of documents to obtain a single global embedding per word. When each word or data point has a single embedding vector, this is called a **static embedding**.
 
@@ -437,8 +442,111 @@ Fun widget to try out: [Embedding projector](https://projector.tensorflow.org/)
 
 In general, you can create a hidden layer of size d in your neural network that is designated as the **embedding layer**, where d represents both the number of nodes in the hidden layer and the number of dimensions in the embedding space.
 
-**Contextual embeddings** allow a word to be represented by multiple embeddings that incorporate information about the surrounding words as well as the word itself. E.g. orange colour, orange fruit. Some methods for creating contextual embeddings, like ELMo, take the static embedding of an example, such as the word2vec vector for a word in a sentence, and transform it by a function that incorporates information about the words around it. 
+**Contextual embeddings** allow a word to be represented by multiple embeddings that incorporate information about the surrounding words as well as the word itself. E.g. orange colour, orange fruit. Contextual embeddings encode positional information, while static embeddings do not. One token is represented by one static embedding, but can be represented by multiple contextual embeddings.
 
-For ELMo models specifically, the static embedding is aggregated with embeddings taken from other layers, which encode front-to-back and back-to-front readings of the sentence.
+Some methods for creating contextual embeddings, like ELMo, take the static embedding of an example, such as the word2vec vector for a word in a sentence, and transform it by a function that incorporates information about the words around it. For ELMo models specifically, the static embedding is aggregated with embeddings taken from other layers, which encode front-to-back and back-to-front readings of the sentence.
 
 BERT models mask part of the sequence that the model takes as input.
+
+---
+
+## Large Language Models
+
+A **language model** estimates the probability of a **token** or sequence of tokens occurring within a longer sequence of tokens. A token could be a word, a subword (a subset of a word), or even a single character.
+
+**Tokenisation** is language specific, so the number of characters per token differs across languages. For English, one token corresponds to ~4 characters or about 3/4 of a word, so 400 tokens ~= 300 English words.
+
+Tokens are the atomic unit or smallest unit of language modeling.
+
+Tokens are now also being successfully applied to computer vision and audio generation.
+
+Uses of language models:
+- Fill in blanks
+- Generate text
+- Translate text
+- Summarise documents
+
+**N-grams** are ordered sequences of words used to build language models, where N is the number of words in the sequence. Longer N-grams would certainly provide more context than shorter N-grams. However, as N grows, the relative occurrence of each instance decreases. When N becomes very large, the language model typically has only a single instance of each occurrence of N tokens, which isn't very helpful in predicting the target token.
+
+**Recurrent neural networks** provide more context than N-grams. A recurrent neural network is a type of neural network that trains on a sequence of tokens. Although recurrent neural networks learn more context than N-grams, the amount of useful context recurrent neural networks can intuit is still relatively limited. Recurrent neural networks evaluate information "token by token." In contrast, large language models—the topic of the next section—can evaluate the whole context at once.
+
+**Large language models (LLMs)** predict a token or sequence of tokens, sometimes many paragraphs worth of predicted tokens. LLMs are better than N-gram language models because:
+- LLMs contain far more parameters than recurrent models.
+- LLMs gather far more context.
+
+**Transformers** are the state-of-the-art architecture for a wide variety of language model applications, such as translation.
+
+Full transformers consist of an encoder and a decoder:
+- An **encoder** converts input text into an intermediate representation. An encoder is an enormous neural net.
+- A **decoder** converts that intermediate representation into useful text. A decoder is also an enormous neural net.
+
+<img src="images/TransformerBasedTranslator.png">
+
+Encoder-only architectures map input text into an intermediate representation (often, an embedding layer). 
+
+Decoder-only architectures generate new tokens from the text already generated.
+
+To enhance context, Transformers rely heavily on a concept called **self-attention**. This weighs the importance of relations between tokens in the input sequence.
+- Some self-attention mechanisms are **bidirectional**, meaning that they calculate relevance scores for tokens preceding and following the word being attended to.
+- By contrast, a **unidirectional** self-attention mechanism can only gather context from words on one side of the word being attended to.
+- Encoders use bidirectional self-attention, while decoders use unidirectional
+
+Each self-attention layer is typically comprised of multiple **self-attention heads**. 
+
+A complete transformer model stacks multiple **self-attention layers** on top of one another. 
+
+Transformers contain multiple self-attention layers and multiple self-attention heads per self-attention layer, so Big O is:
+
+O(N2 · S · D)
+
+How LLMS are trained:
+- The first phase of training is usually some form of unsupervised learning on that training data.
+- Specifically, the model trains on masked predictions, meaning that certain tokens in the training data are intentionally hidden.
+- The model trains by trying to predict those missing tokens.
+- An LLM is just a neural net, so loss (the number of masked tokens the model correctly considered) guides the degree to which backpropagation updates parameter values.
+- A Transformer-based model trained to predict missing data gradually learns to detect patterns and higher-order structures in the data to get clues about the missing token.
+- An optional further training step called instruction tuning can improve an LLM's ability to follow instructions.
+
+Transformers contain hundreds of billion or even trillions of parameters.
+
+Benefits:
+- LLMs can generate clear, easy-to-understand text for a wide variety of target audiences.
+- LLMs can make predictions on tasks they are explicitly trained on.
+- Some researchers claim that LLMs can also make predictions for input they were not explicitly trained on, but other researchers have refuted this claim.
+
+Problems
+- Gathering an enormous training set.
+- Consuming multiple months and enormous computational resources and electricity.
+- Solving parallelism challenges.
+- LLMs hallucinate, meaning their predictions often contain mistakes.
+- LLMs consume enormous amounts of computational resources and electricity.
+- Like all ML models, LLMs can exhibit all sorts of bias.
+
+General-purpose LLMs:
+- foundation LLMs: grammar, words, idioms, poetry, not regression/classification, platform rather than solution, needs fine-tuning & distillation
+- base LLMs
+- pre-trained LLMs
+
+**Fine-tuning**
+- Additional training (not extra parameters)
+- Specific examples
+- Computationally expensive
+- Update weight & bias on each backpropagation iteration
+- **Parameter-efficient tuning**: adjust only a subset of parameters
+
+**Distillation**
+- Smaller version of LLM (fewer parameters)
+- Faster & fewer computational/enviro resources
+- Not as good as original LLM's predictions
+- Bulk inference to label data
+- Teacher model (larger) funnels knowledge to Student model (smaller)
+
+**Prompt engineering** enables an LLM's end users to customise the model's output. 
+- Showing one example to an LLM is called **one-shot prompting**.
+- Providing multiple examples is called **few-shot prompting**.
+
+The number of parameters in an LLM is sometimes so large that **online inference** is too slow to be practical for real-world tasks like regression or classification. Consequently, many engineering teams rely on **offline inference** (also known as bulk inference or static inference) instead. In other words, rather than responding to queries at serving time, the trained model makes predictions in advance and then caches those predictions.
+
+Like any form of machine learning, LLMs generally share the biases of:
+- The data they were trained on.
+- The data they were distilled on.
