@@ -190,8 +190,6 @@ The next step in building a vocabulary is to convert each index number to its **
 
 A feature whose values are predominantly zero (or empty) is termed a **sparse feature**. Ordinal encoding (integer labels): \[1\]
 
-<img src="vocabulary-index-sparse-feature.svg">
-
 You can lump outliers into a single "catch-all" category called **out-of-vocabulary (OOV)**.
 
 **Embeddings** substantially reduce the number of dimensions, which benefits models in two important ways:
