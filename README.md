@@ -13,6 +13,8 @@ https://developers.google.com/machine-learning/crash-course/
 
 ### Linear Regression
 
+Linear regression is a statistical technique used to find the relationship between variables. In an ML context, linear regression finds the relationship between **features** and a **label**.
+
 <img src="images/car-data-points-with-model.png">
 
 **Gradient descent** is an iterative process that finds the best weights and bias that minimise the loss.
