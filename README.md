@@ -339,3 +339,62 @@ Loss curves
 | Divergance of train/test | Simplify model and increase regularisation rate, make sure both are representative datasets that are statistically equivalent |
 | Gets stuck | Shuffle training set |
 
+---
+
+## Neural Network
+
+Neural networks are a family of model architectures designed to find nonlinear patterns in data. During training of a neural network, the model automatically learns the optimal feature crosses to perform on the input data to minimize loss.
+
+In neural network terminology, additional layers between the input layer and the output layer are called **hidden layers**, and the nodes in these layers are called **neurons**.
+
+Parameters = Weights + Bias
+
+Example: 3 input nodes, 4 hidden nodes, 1 output node
+- Each hidden node has 4 parameters: 3 weights (from the inputs nodes) + bias
+- Each output node has 5 parameters: 4 weights (from the hidden nodes) + bias
+- Total number of parameters = 4\*4 + 5\*1 = 21
+
+Linear calculations performed on the output of linear calculations are also linear, which means this model cannot learn nonlinearities.
+
+**Activation function** = a nonlinear transform of a neuron's output value before the value is passed as input to the calculations of the next layer of the neural network
+
+Three mathematical functions that are commonly used as activation functions are **sigmoid, tanh, and ReLU**.
+- The Sigmoid function (1/(1+e^-x) outputs a value between 0 and 1
+- The tanh(x) function outputs a value between -1 and 1
+- The rectified linear unit activation function (max(0,x)) returns a value between 0 and inf
+
+ReLU often works a little better as an activation function than a smooth function like sigmoid or tanh, because it is less susceptible to the **vanishing gradient problem** during neural network training. ReLU is also significantly easier to compute than these functions.
+
+Vanishing gradient problem = The tendency for the gradients of early hidden layers of some deep neural networks to become surprisingly flat (low). Increasingly lower gradients result in increasingly smaller changes to the weights on nodes in a deep neural network, leading to little or no learning. Models suffering from the vanishing gradient problem become difficult or impossible to train. **Long Short-Term Memory** (LSTM) cells address this issue.
+
+LSTM = A type of cell in a **recurrent neural network** (RNN) used to process sequences of data in applications such as handwriting recognition, machine translation, and image captioning. LSTMs address the vanishing gradient problem that occurs when training RNNs due to long data sequences by maintaining history in an internal memory state based on new input and context from previous cells in the RNN.
+
+**Backpropagation** is the most common training algorithm for neural networks. It makes gradient descent feasible for multi-layer neural networks. Many machine learning code libraries (such as Keras) handle backpropagation automatically, so you don't need to perform any of the underlying calculations yourself. The backpropagation training algorithm makes use of the calculus concept of a gradient to adjust model weights to minimise loss
+
+**Vanishing gradients** = The gradients for the lower neural network layers (those closer to the input layer) can become very small. In deep networks (networks with more than one hidden layer), computing these gradients can involve taking the product of many small terms. The ReLU activation function can help prevent vanishing gradients.
+
+**Exploding gradients** = If the weights in a network are very large, then the gradients for the lower layers involve products of many large terms. In this case you can have exploding gradients: gradients that get too large to converge. **Batch normalisation** can help prevent exploding gradients, as can lowering the learning rate.
+
+**Dead ReLU Units** = Once the weighted sum for a ReLU unit falls below 0, the ReLU unit can get stuck. It outputs 0, contributing nothing to the network's output, and gradients can no longer flow through it during backpropagation. With a source of gradients cut off, the input to the ReLU may not ever change enough to bring the weighted sum back above 0. Lowering the learning rate can help keep ReLU units from dying.
+
+**Dropout Regularisation** = It works by randomly "dropping out" unit activations in a network for a single gradient step. The more you drop out, the stronger the regularisation:
+- 0.0 = No dropout regularization.
+- 1.0 = Drop out all nodes. The model learns nothing.
+- Values between 0.0 and 1.0 = More useful.
+
+**One-vs.-all** provides a way to use binary classification for a series of yes or no predictions across multiple possible labels. Given a classification problem with N possible solutions, a one-vs.-all solution consists of N separate binary classifiers—one binary classifier for each possible outcome. During training, the model runs through a sequence of binary classifiers, training each to answer a separate classification question. In a one-vs.-all approach, the probability of each binary set of outcomes is determined independently of all the other sets.
+
+[<img src="one_vs_all_neural_net.png">]
+
+For one-vs.-all, we applied the sigmoid activation function to each output node independently, which resulted in an output value between 0 and 1 for each node, but did not guarantee that these values summed to exactly 1.
+
+For one-vs.-one, we can instead apply a function called **softmax**, which assigns decimal probabilities to each class in a multi-class problem such that all probabilities add up to 1.0. This additional constraint helps training converge more quickly than it otherwise would. In order to perform softmax, the hidden layer directly preceding the output layer (called the softmax layer) must have the same number of nodes as the output layer.
+
+[<img src="one_vs_one_neural_net.png">]
+
+**Full softmax** is the softmax we've been discussing; that is, softmax calculates a probability for every possible class.
+
+**Candidate sampling** means that softmax calculates a probability for all the positive labels but only for a random sample of negative labels. 
+
+Softmax must only be used when each example is a member of exactly 1 class. Otherwise **multiple logistic regressions** should be used.
+
