@@ -409,3 +409,36 @@ For one-vs.-one, we can instead apply a function called **softmax**, which assig
 
 Softmax must only be used when each example is a member of exactly 1 class. Otherwise **multiple logistic regressions** should be used.
 
+---
+
+## Embeddings
+
+Pitfalls of sparse data representations
+- Number of weights
+- Number of datapoints
+- Amount of computation
+- Amount of memory
+- Difficulty of supporting on-device machine learning (ODML)
+
+An **embedding** is a vector representation of data in embedding space. An embedding represents each item in n-dimensional space with n floating-point numbers (typically in the range –1 to 1 or 0 to 1).
+
+<img src="images/embeddings_3D_tangyuan.png">
+
+In the real world, embedding spaces are d-dimensional, where d is much higher than 3. For word embeddings, d is often 256, 512, or 1024.
+
+**word2vec** trains on a corpus of documents to obtain a single global embedding per word. When each word or data point has a single embedding vector, this is called a **static embedding**.
+
+Fun widget to try out: [Embedding projector](https://projector.tensorflow.org/)
+- flattens 10,000 word2vec static vectors into a 3D space
+- The pre-trained word vectors offered by word2vec were in fact trained on Google News articles up to 2013
+- MNIST: A public-domain dataset compiled by LeCun, Cortes, and Burges containing 60,000 images, each image showing how a human manually wrote a particular digit from 0–9. Each image is stored as a 28x28 array of integers, where each integer is a grayscale value between 0 and 255, inclusive.
+
+**Principal component analysis (PCA)** has been used to create word embeddings. Given a set of instances like bag of words vectors, PCA tries to find highly correlated dimensions that can be collapsed into a single dimension.
+
+In general, you can create a hidden layer of size d in your neural network that is designated as the **embedding layer**, where d represents both the number of nodes in the hidden layer and the number of dimensions in the embedding space.
+
+**Contextual embeddings** allow a word to be represented by multiple embeddings that incorporate information about the surrounding words as well as the word itself. E.g. orange colour, orange fruit. Some methods for creating contextual embeddings, like ELMo, take the static embedding of an example, such as the word2vec vector for a word in a sentence, and transform it by a function that incorporates information about the words around it. 
+
+For ELMo models specifically, the static embedding is aggregated with embeddings taken from other layers, which encode front-to-back and back-to-front readings of the sentence.
+
+BERT models mask part of the sequence that the model takes as input.
