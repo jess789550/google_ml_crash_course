@@ -552,3 +552,101 @@ The number of parameters in an LLM is sometimes so large that **online inference
 Like any form of machine learning, LLMs generally share the biases of:
 - The data they were trained on.
 - The data they were distilled on.
+
+---
+
+## Production ML systems
+
+You can train a model in either of two ways:
+- **Static training** (also called offline training) means that you train a model only once. 
+- **Dynamic training** (also called online training) means that you train a model continuously or at least frequently.
+
+| | Static | Dynamic |
+| --- | --- | --- |
+| **Advantages** | Simpler and cheaper | More adaptable |
+| **Disadvantages** | Sometimes staler | More work |
+
+**Inference** is the process of making predictions by applying a trained model to unlabeled examples. 
+- **Static inference** (also called offline inference or batch inference) means the model makes predictions on a bunch of common unlabeled examples and then caches those predictions somewhere. Good for models that take a long time to make predictions and require cache.
+- **Dynamic inference** (also called online inference or real-time inference) means that the model only makes predictions on demand, for example, when a client requests a prediction. Good for models that make quick predictions.
+
+| | Static | Dynamic |
+| --- | --- | --- |
+| **Advantages** | Cheaper and can do post-verification | Can infer a prediction on any new item |
+| **Disadvantages** | Can only serve cached predictions and takes hours/days to update | Compute intensive and latency sensitive, monitoring intensive |
+
+Raw data must be **feature engineered** (transformed). This can be done before or while training the model.
+
+| | Before | After |
+| --- | --- | --- |
+| **Advantages** | Transform data once and analyse the entire datase |  Can still use the same raw data files if you change the transformations and ensured the same transformations at training and prediction time. |
+| **Disadvantages** | Must recreate the transformations at prediction time. Beware of training-serving skew! |  Increase model latency and transform each batch |
+
+**Training-serving skew** is more dangerous when your system performs dynamic (online) inference. On a system that uses dynamic inference, the software that transforms the raw dataset usually differs from the software that serves predictions, which can cause training-serving skew. Training-serving skew means your input data during training differs from your input data in serving.
+
+| Type |	Definition |	Example |	Solution |
+| --- | --- | --- | --- |
+| **Schema skew** | Training and serving input data do not conform to the same schema. | The format or distribution of the serving data changes. | Use the same schema to validate training and serving data. Check statistics. |
+| **Feature skew** | Engineered data differs between training and serving. | Feature engineering code differs between training and serving. | Apply statistical rules across training and serving engineered data. Number/ratio of skewed features. |
+
+Transforming the data per batch: precompute the mean and standard deviation across the entire dataset and then use them as constants in the model (Z-score normalisation).
+
+Deployment Testing
+- **Test-driven development**: discover the achievable loss during model development and then test new model versions against the achievable loss
+- Seed the random number generator
+- Initialise model components in a fixed order
+- Take the average of several runs of the model
+- Use version control
+- API testing: write a **unit test** to generate random input data and run a single step of gradient descent
+- Check that components work together by writing an **integration test** that runs the entire pipeline end-to-end
+- **Sudden degradation**: bug in the new version could cause significantly lower quality.
+- **Slow degradation**: ensure your model's predictions on a validation dataset meet a fixed threshold
+- Ensure that the operations used by the model are present in the server by staging the model in a sandboxed version of the server to avoid different software dependencies before updating the server
+
+Data schema
+- Understand the range and distribution of your features.
+- Encode your understanding into the data schema.
+- Test your data against the data schema.
+
+Write unit tests based on your understanding of feature engineered data. 
+
+**Data slices** = subsets of data. Compare model metrics for these data slices against the metrics for your entire dataset to remove bias.
+
+To measure real-world impact, you need to define separate metrics (survey).
+
+**Label leakage** means that your **ground truth labels** that you're trying to predict have inadvertently entered your training features. Label leakage is sometimes very difficult to detect. Label leakage is when information that is not available at the time of prediction leaks into the training set used for model training.
+
+Monitor model age throughout pipeline: old models might not perform as well.
+
+Test that model weights and outputs are numerically stable: weights and layer outputs should not be NaN (not a number) or Inf (infinite).
+
+Monitor model performance
+- Track model performance by versions of code, model, and data.
+- Test the training steps per second for a new model version against the previous version and against a fixed threshold.
+- Catch memory leaks by setting a threshold for memory use.
+- Monitor API response times and track their percentiles.
+- Monitor the number of queries answered per second.
+
+Test the quality of live model on served data
+- Generate labels using human raters.
+- Investigate models that show significant statistical bias in predictions.
+- Track real-world metrics for your model.
+- Mitigate potential divergence between training and serving data by serving a new model version on a fraction of your queries
+
+Randomisation
+- Seed your **random number generators** (RNGs).
+- Use invariant hash keys. **Hashing** is a common way to split or sample data. Hashing is a good way to map large categorical sets into the selected number of buckets. Hashing turns a categorical feature having a large number of possible values into a much smaller number of values by grouping values in a deterministic way.
+
+Considerations for hashing
+- When using hashing to include or exclude queries:
+  - Your training set will see a less diverse set of queries.
+  - Your evaluation sets will be artificially hard, because they won't overlap with your training data.
+- Instead you can hash on query + date, which would result in a different hashing each day.
+
+<img src="images/hashing_on_query.gif">
+
+Questions to ask
+- Is each feature helpful?
+- Is your data source reliable?
+- Is your model part of a feedback loop? (This can affect dynamic training as the model will affect the input data)
+
