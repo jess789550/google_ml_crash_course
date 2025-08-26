@@ -633,7 +633,7 @@ Test the quality of live model on served data
 - Track real-world metrics for your model.
 - Mitigate potential divergence between training and serving data by serving a new model version on a fraction of your queries
 
-Randomisation
+Randomisation (reproducibility)
 - Seed your **random number generators** (RNGs).
 - Use invariant hash keys. **Hashing** is a common way to split or sample data. Hashing is a good way to map large categorical sets into the selected number of buckets. Hashing turns a categorical feature having a large number of possible values into a much smaller number of values by grouping values in a deterministic way.
 
