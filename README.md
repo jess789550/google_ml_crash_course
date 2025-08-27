@@ -650,3 +650,74 @@ Questions to ask
 - Is your data source reliable?
 - Is your model part of a feedback loop? (This can affect dynamic training as the model will affect the input data)
 
+---
+
+## Automated Machine Learning (AutoML)
+
+Manual ML workflow:
+- Repetitive tasks
+- Specialised Skills
+
+<img src="images/ml-workflow.png">
+
+AutoML is useful for speeding up repetitive tasks:
+- Data Engineering
+  - Feature engineering.
+  - Feature selection.
+- Training
+  - Identifying an appropriate ML algorithm.
+  - Selecting the best hyperparameters.
+- Analysis
+  - Evaluating metrics generated during training based on test and validation datasets.
+ 
+| Benefits | Limitations |
+| --- | --- |
+| Save time | Models can't be customised during training |
+| Improve quality of model | Quality not as good as manual training |
+| No need for specialised skils | Model search and complexity can be opaque |
+| Smoke test a dataset | Multiple AutoML runs may show more variance |
+| Evaluate a dataset | |
+| Enforce best practices | |
+| Less data needed with transfer learning | |
+
+**Transfer learning** might involve transferring knowledge from the solution of a simpler task to a more complex one, or involve transferring knowledge from a task where there is more data to one where there is less data.
+
+AutoML tools fall into two main categories:
+- Tools that require no coding
+- API and CLI tools: advanced automation features, more programming required
+
+AutoML workflow
+- Problem definition
+- Data gathering
+- Data preparation
+  - Label data
+  - Clean and format data
+  - Perform feature transformations
+
+Model development (with a no-code AutoML)
+ 1. Import data
+ 2. Analyse data
+ 3. Refine data
+   - Semantic checking: type of data, categorical, continuous
+   - Transformations: e.g. get length of description or comments
+ 4. Configure AutoML run parameters
+   - ML problem type: classifcation, regression
+   - Select column of labels
+   - Select the set of features to use to train the model
+   - Select the set of ML algorithms
+   - Select the evaluation metric
+
+Evaluate model
+- Examine feature importance metrics
+- Examine architecture and hyperparameters
+- Evaluate top-level model performance with plots and metrics
+
+Productisation
+- Test and deploy model
+
+Retrain model
+- Improved dataset
+
+---
+
+## Fairness
