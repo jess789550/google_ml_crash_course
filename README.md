@@ -770,6 +770,8 @@ Demographic parity
 - does not take the distribution of predictions for each demographic group
 - E.g. students from minority/majority demographics are accepted at the same rate %
 
+<img src="images/fairness_metrics_demographic_parity.png">
+
 Equality of opportunity
 - A fairness metric to assess whether a model is predicting the desirable outcome equally well for all values of a sensitive attribute.
 - Equality of opportunity is related to equalised odds, which requires that both the true positive rates and false positive rates are the same for all groups.
@@ -778,3 +780,25 @@ Equality of opportunity
 - designed for use cases where there is a clear-cut preferred label
 - assesses fairness by comparing error rates in aggregate for demographic groups which may not always be feasible
 - E.g. *qualified* students from minority/majority demographics are accepted at the same rate %
+
+<img src="images/fairness_metrics_demographic_parity_by_qualifications.png">
+
+Counterfactual fairness
+- Counterfactual fairness stipulates that two examples that are identical in all respects, except a given sensitive attribute (here, demographic group membership), should result in the same model prediction.
+- E.g. you only have demographic info for two samples
+- evaluate predictions for fairness in many cases where using other metrics wouldn't be feasible
+- identify bias issues
+- doesn't provide as holistic a view of bias in model predictions
+- reccommend: aggregate fairness analysis (using a metric like demographic parity or equality of opportunity) as well as a counterfactual fairness analysis to gain the widest range of insights into potential bias issues in need of remediation
+
+<img src="images/fairness_metrics_counterfactual_satisfied.png">
+
+Incompatibility of fairness metrics
+- The idea that some notions of fairness are mutually incompatible and cannot be satisfied simultaneously.
+- As a result, there is no single universal metric for quantifying fairness that can be applied to all ML problems.
+
+---
+
+## Badges
+
+<img src="images/badges.png">
