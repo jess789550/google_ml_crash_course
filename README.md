@@ -781,7 +781,7 @@ Equality of opportunity
 - assesses fairness by comparing error rates in aggregate for demographic groups which may not always be feasible
 - E.g. *qualified* students from minority/majority demographics are accepted at the same rate %
 
-<img src="images/fairness_metrics_demographic_parity_by_qualifications.png">
+<img src="images/fairness_metrics_equality_of_opportunity_by_qualifications.png">
 
 Counterfactual fairness
 - Counterfactual fairness stipulates that two examples that are identical in all respects, except a given sensitive attribute (here, demographic group membership), should result in the same model prediction.
