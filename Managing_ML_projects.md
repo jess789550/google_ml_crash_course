@@ -7,7 +7,7 @@ Implementing ML consists of the phases:
 - Pipeline building: build and implement the infrastructure for scaling, monitoring, and maintaining models in production
 - Productionisation
 
-[ML phases](images/ml_phases.png)
+![ML phases](images/ml_phases.png)
 
 Assembling an ML team
 - ML product manager
