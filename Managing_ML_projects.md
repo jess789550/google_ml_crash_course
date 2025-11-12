@@ -40,7 +40,7 @@ Stakeholders
 
 ---
 
-Feasibility
+## Feasibility
 - Data availability
 - Problem difficulty
 - Prediction quality
@@ -100,7 +100,7 @@ Cost
 
 ---
 
-ML project planning
+## ML project planning
 - Project uncertainty: significant increase in effort but only minimal gains in model quality
 - Experimental approach:
   - Time box the work: Set clear timeframes to complete tasks or attempt a particular solution
@@ -112,7 +112,9 @@ ML project planning
 - Identify lessons learned and try to improve the system one thing at a time.
 - Plan for failures.
 
-Measuring success
+---
+
+## Measuring success
 - Business metrics: Metrics for quantifying business performance, for example, revenue, click-through rate, or number of users.
 - Model metrics: Metrics for quantifying model quality, for example, Root Mean Squared Error, precision, or recall.
 
@@ -135,7 +137,7 @@ Connection between model metrics and business metrics
 
 ---
 
-Experiments
+## Experiments
 - viability tests
 - testable and reproducible hypotheses
 - continual, incremental improvements
@@ -166,4 +168,92 @@ Implement an end-to-end solution
 Troubleshooting stalled projects
 - Strategic: reframe the problem.
 - Technical: Spend time diagnosing and analyzing wrong predictions
+
+---
+
+## ML pipelines
+- The goal is to build automated pipelines for developing, testing, and deploying models over time
+- Models typically need retraining with up-to-date data to continue serving high-quality predictions over the long term.
+
+Building pipelines
+- Delivering predictions: receives and processes the user's data, makes a prediction, and then delivers it to the user
+- Updating the model:
+  - Data pipeline: create training and test datasets
+  - Training pipeline: train model
+  - Validation pipeline: compare to production model using test datasets
+ 
+![Data, training, and validation piplines](images/pipes.png) 
+
+Model staleness and training frequency
+- A recommended best practice is to train and deploy new models on a daily basis.
+- If the data is dynamic, train often. If it's less dynamic, you might not need to train that often.
+
+Serving pipeline
+- Online predictions: happen in real time, typically by sending a request to an online server and returning a prediction
+- Offline predictions: precomputed and cached
+
+Prediction post-processing
+- remove toxic or biased content.
+- reorder results
+- boost more authoritative content,
+- present a diversity of results,
+- demote particular results (like clickbait),
+- remove results for legal reasons
+-  feature engineering step is typically built within the model and not a separate, stand-alone process
+
+Assets and metadata storage
+- The serving pipeline should incorporate a repository to log model predictions and, if possible, the ground truth.
+- monitor the general quality of your model and determine if it's starting to lose quality.#
+
+Capturing ground truth
+- get users to report the ground truth by adding feedback mechanisms into the app
+- ground truth may only become available later
+- relies on users to correctly categorise data
+
+Data pipelines
+- generate training and test datasets from application data
+- same features and label originally used to train the model, but with newer information
+
+Data collection and processing
+- Data collection: During experimentation, collecting data typically requires accessing saved data. For data pipelines, collecting data might require discovering and getting approval to access streaming logs data.
+- Data processing: During experimentation, the right features came from scraping, joining, and sampling the experimentation datasets. For the data pipelines, generating those same features might require entirely different processes.
+
+Assets and metadata storage
+- Version controlled repositories
+- Reproducibility
+- Compliance
+- Retention
+- Access management
+- Data integrity
+- Discoverability
+
+Documenting your data
+- Good documentation helps others understand key information about your data, like its type, source, size, and other essential metadata.
+-  If you plan on sharing or publishing your data, use data cards to structure the information.
+-  Data cards = tructured summaries of essential facts about various aspects of ML datasets needed by stakeholders across a project's lifecycle for responsible AI development.
+-  https://sites.research.google/datacardsplaybook/
+
+Training and validation pipelines
+-  produce new models to replace production models before they go stale
+- if the trained model isn't meaningfully worse than the production model, the trained model goes into production.
+- If the trained model is worse, the monitoring infrastructure should create an alert
+
+Assets and metadata storage
+- Models and their metadata should be stored in versioned repositories
+- Tracking and evaluation
+- Model release process
+- Reproducibility and debugging
+- Discoverability
+- Use model cards to document and share key information about your model, like its purpose, architecture, hardware requirements, evaluation metrics, etc.
+- https://modelcards.withgoogle.com/face-detection
+
+Challenges building pipelines
+- Getting access to the data you need
+- Getting the right features
+- Understanding how the data is collected and represented
+- Understanding the tradeoffs between effort, cost, and model quality
+- Getting compute: TPUs = Tensor Processing Unit, specialized processor developed by Google to accelerate machine learning and artificial intelligence (AI) workloads
+- Finding the right golden dataset
+
+---
 
