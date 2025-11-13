@@ -278,7 +278,7 @@ Logging, monitoring, and alerting
 
 | Pipeline | Monitor |
 | --- | --- |
-| **Serving** | - Skews or drifts in the serving data compared to the training data<br>- Skews or drifts in predictions<br>- Data type issues, like missing or corrupted values<br>- Quota usage<br>- Model quality metrics<br><br>Calculating a production model's quality is different than calculating a model's quality during training. In production, you won't necessarily have access to the ground truth to compare predictions against. Instead, you'll need to write custom monitoring instrumentation to capture metrics that act as a proxy for model quality.<br><br>For example, in a mail app, you won't know which mail is spam in real time. Instead, you can monitor the percentage of mail users move to spam. If the number jumps from 0.5% to 3%, that signals a potential issue with the model.<br><br>Note that comparing the changes in the proxy metrics is more insightful than their raw numbers. |
+| **Serving** | - Skews or drifts in the serving data compared to the training data<br>- Skews or drifts in predictions<br>- Data type issues, like missing or corrupted values<br>- Quota usage<br>- Model quality metrics |
 | **Data** | - Skews and drifts in feature values<br>- Skews and drifts in label values<br>- Data type issues, like missing or corrupted values<br>- Quota usage rate<br>- Quota limit about to be reached |
 | **Training** | - Training time<br>- Training failures<br>- Quota usage |
 | **Validation** | - Skew or drift in the test datasets |
@@ -295,6 +295,51 @@ Deploying a model
 
 ---
 
+AI and ML ethics and safety
+- ML has the potential to transform society in many meaningful ways, either positively or negatively
+-  shouldn't cause harm or be susceptible to misuse.
+-  shouldn't perpetuate, reinforce, or exacerbate biases or prejudices.
+-  shouldn't collect or use personal data irresponsibly.
 
+Google's AI principles
+- Fairness
+- Privacy
+- Transparency
+- Safety
 
+Fairness
+- avoid creating/reinforcing bias
+- verifying the training data accurately reflects the distribution
+- Identify underrepresented groups in evaluation datasets or groups
+- use golden datasets
+- Avoid including sensitive features in datasets
+- Avoid including features with little empirical or explanatory power
+- Measure potential adverse impact a model's predictions might have on particular groups
+- FAIR data: findability, accessibility, interoperability, and reusability
 
+Privacy
+- European Union's Digital Markets Act (DMA) for consent to share or use personal data.
+- European Union GDPR laws.
+- Data Protection Act 2018
+- Caldicott Principles
+- HIPAA
+- NIST-800
+- remove all personally identifiable information (PII)
+
+Transparency
+- be accountable
+- explain clearly to others how model works
+- use model cards
+
+Safety
+- test model thoroughly to ensure it doesn't fail
+
+---
+
+## ML resources
+Tools and frameworks for building ML and AI applications and products:
+- developers.google.com/focus/ai-development
+- ai.google/build
+
+AI and ML community for sharing ML models and datasets:
+- ![Kaggle](https://www.kaggle.com/)
