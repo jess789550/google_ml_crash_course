@@ -342,4 +342,4 @@ Tools and frameworks for building ML and AI applications and products:
 - ai.google/build
 
 AI and ML community for sharing ML models and datasets:
-- ![Kaggle](https://www.kaggle.com/)
+- [Kaggle](https://www.kaggle.com/)
