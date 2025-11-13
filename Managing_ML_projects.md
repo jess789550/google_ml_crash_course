@@ -252,8 +252,49 @@ Challenges building pipelines
 - Getting the right features
 - Understanding how the data is collected and represented
 - Understanding the tradeoffs between effort, cost, and model quality
-- Getting compute: TPUs = Tensor Processing Unit, specialized processor developed by Google to accelerate machine learning and artificial intelligence (AI) workloads
+- Getting compute: TPUs = Tensor Processing Unit, specialised processor developed by Google to accelerate machine learning and artificial intelligence (AI) workloads
 - Finding the right golden dataset
 
 ---
+
+## Productionisation
+
+To prepare your ML pipelines for production, you need to do the following:
+- Provision compute resources for your pipelines
+- Implement logging, monitoring, and alerting
+
+Provisioning compute resources
+- Serving, training, and validation pipelines: TPUs, GPUs, or CPUs. Typically, training requires bigger hardware than serving.
+- Data pipelines: quota for RAM and CPU
+
+Estimating quota
+-  find similar projects to base your estimates on
+-  predict the service's queries per second
+
+Logging, monitoring, and alerting
+- identify issues in ML pipelines and mitigate potential business impact
+- Latency. How long does it take to deliver a prediction?
+- Outages. Has the model stopped delivering predictions?
+
+| Pipeline | Monitor |
+| --- | --- |
+| **Serving** | - Skews or drifts in the serving data compared to the training data<br>- Skews or drifts in predictions<br>- Data type issues, like missing or corrupted values<br>- Quota usage<br>- Model quality metrics<br><br>Calculating a production model's quality is different than calculating a model's quality during training. In production, you won't necessarily have access to the ground truth to compare predictions against. Instead, you'll need to write custom monitoring instrumentation to capture metrics that act as a proxy for model quality.<br><br>For example, in a mail app, you won't know which mail is spam in real time. Instead, you can monitor the percentage of mail users move to spam. If the number jumps from 0.5% to 3%, that signals a potential issue with the model.<br><br>Note that comparing the changes in the proxy metrics is more insightful than their raw numbers. |
+| **Data** | - Skews and drifts in feature values<br>- Skews and drifts in label values<br>- Data type issues, like missing or corrupted values<br>- Quota usage rate<br>- Quota limit about to be reached |
+| **Training** | - Training time<br>- Training failures<br>- Quota usage |
+| **Validation** | - Skew or drift in the test datasets |
+
+Deploying a model
+- Approvals required to begin deployment and increase the roll out.
+- How to put a model into production.
+- Where the model gets deployed, for example, if there are staging or canary environments.
+- What to do if a deployment fails.
+- How to rollback a model already in production.
+- Automating deployments distributes responsibility
+- reduces potential mistakes, increases efficiency and reliability, and enables on-call rotations and SRE (Site Reliability Engineering) support
+- deploy new models to a subset of users to check that the model is behaving as expected
+
+---
+
+
+
 
