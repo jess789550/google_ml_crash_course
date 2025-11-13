@@ -338,8 +338,8 @@ Safety
 
 ## ML resources
 Tools and frameworks for building ML and AI applications and products:
-- developers.google.com/focus/ai-development
-- ai.google/build
+- [developers.google.com/focus/ai-development](https://ai.google.dev/)
+- [ai.google/build](https://ai.google/build/)
 
 AI and ML community for sharing ML models and datasets:
 - [Kaggle](https://www.kaggle.com/)
