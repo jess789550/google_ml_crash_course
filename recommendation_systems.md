@@ -112,3 +112,43 @@
 - Hard to include side features for query/item
   - Side features are features beyond query/item ID
   - Generalise WALS: augment input matrix with features 
+
+## Deep neural network (DNN) models
+- Limitations of matrix factorisation: difficulty of using side features; relevance of recommendations
+- DNNs can easily incorporate query features and item features
+
+### Softmax DNN for recommendation
+- User input is the user query
+- output is probability vector
+- input: dense features (time watching movie), sparse features (movie watch history/country)
+- hidden layers
+- non-linear activation functions
+- capture complex relationships
+- more parameters is more expensive though
+- output to probability distribution
+- loss function: output of layer vs ground truth
+- softmax embeddings: dot product
+- Two-tower neural network: 2 NN, model learns nonlinear function that maps item features to an embedding
+
+![Neural Network](images/DNN.png)
+
+### Softmax training
+- Query features and vector of items user interacted with
+- variables of the model are weights in different layers
+- stochastic gradient decent
+- Negative sampling: compare 2 probability vectors
+- Folding: embeddings from different features may end up in the same region of the embedding space by chance --> the model may incorrectly predict a high score for an item from a different group
+- Negative examples are items labeled "irrelevant" to a given query: teach model that embeddings should be further apart
+- Use all positive items + a sample of negative items for training
+- Can sample uniformly
+- Can give higher probability to items with higher score
+
+### Comparison
+||Matrix Factorisation|Softmax DNN|
+|---|---|---|
+|Query features|Not easy to include|Can be included|
+|Cold start|Does not handle out-of-vocab quieries/items well|Easily handles new queries|
+|Folding|Easily reduced by adjusting unobserved weight in WALS|Prone to folding|
+|Training scalability|Easily scalable|Harder to scale|
+|Serving|Embeddings are static and can be stored|Item embeddings are static but quiery embedding is not (expensive)|
+
