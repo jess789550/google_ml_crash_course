@@ -152,3 +152,47 @@
 |Training scalability|Easily scalable|Harder to scale|
 |Serving|Embeddings are static and can be stored|Item embeddings are static but quiery embedding is not (expensive)|
 
+---
+
+## Retrieval, scoring, and re-ranking
+
+### Retrieval
+- Compute query embedding: embedding matrix or real-time
+- Nearest neighbour problem
+- Large-scale: exhaustive scoring is expensive
+- Precompute and store list of top candidates: exhaustive scoring offline
+- Approximate nearest neighbours: [ScaNN](https://github.com/google-research/google-research/tree/master/scann)
+
+### Scoring
+- The system combines these different sources into a common pool of candidates that are then scored by a single model and ranked according to that score
+- query features (for example, user watch history, language, country, time)
+- video features (for example, title, tags, video embedding)
+- With a smaller pool of candidates, the system can afford to use more features and a more complex model that may better capture context
+- If the scoring function optimizes for clicks, the systems may recommend click-bait videos.
+- If the scoring function optimizes for watch time, the system might recommend very long videos
+- If the scoring function Increases Diversity and Maximizes Session Watch Time it would Recommend shorter videos, but ones that are more likely to keep the user engaged.
+- Bias: need to know where the videos will be displayed on the screen (lower is less likely to be clicked); need position-independent rankings
+
+### Re-ranking
+- consider additional criteria or constraints
+- use filters that remove some candidates.
+
+### Freshness
+- latest usage information
+- Re-run training as often as possible
+- Create an "average" user to represent new users in matrix factorization models
+- Use a DNN such as a softmax model or two-tower model
+- Add document age as a feature
+
+### Diversity
+- candidates tend to be very similar to each other - can be boring
+- Train multiple candidate generators using different sources.
+- Train multiple rankers using different objective functions.
+- Re-rank items based on genre or other metadata to ensure diversity.
+
+### Fairness
+- model should treat all users fairly.
+- include diverse perspectives in design and development.
+- Train ML models on comprehensive data sets
+- Track metrics (for example, accuracy and absolute error) on each demographic to watch for biases
+- Make separate models for underserved groups.
