@@ -45,13 +45,67 @@
 - Log transforms for power law distribution (positive skew)
 - Quantiles for sparse distribution
 
-![Normalise](NormalizeData.png)
+![Normalise](images/NormalizeData.png)
 
-![Log transform](logtransform.png)
+![Log transform](images/logtransform.png)
 
-![Quantiles](Quantize.png)
+![Quantiles](images/Quantize.png)
 
 ---
 
 ## K-means clustering
+- Agglomerative hierarchial clustering complexity is O(n^2 log n)
+- Divisive hierachial clustering complexity is O(n^2)
+- k-means complexity is O(nk)
 
+### Steps
+- Provide initial guess for k
+- Randomly choose k centroids
+- Assign each point to nearest centroid
+- Assign new centroid: mean of clusters
+- Reassign each point to nearest centroid
+- Repeat until no changes (convergence)
+
+![k-means clustering algorithm](images/kmeans.png)
+
+### Manual simlilarity measure
+- Compare features using root mean squared error (RMSE)
+- Categorical data more difficult: single-valued (univalent), multi-valued (multivalent)
+- Can use Jaccard similarity for categorical data
+- Ideally you would convert strings into numbers and calculate Euclidean distance
+- Can use supervised similarity measure instead
+
+### Evaluating results
+- No ground truth available
+- Assess quality of clustering: cardinality (number of samples per cluster), magnitude (sum of distances from centroid in cluster), downstream performance
+- Magnitude versus cardinality: linear relationship - can spot outliers
+- Reassess your similarity measure: identify pairs of examples known to be more or less similar, should be representative
+- Find optimal number of clusters: k (number of clusters) vs magnitude (loss) - inverse relationship
+
+![Evaluation Flow Diagram](images/evaluateflow.png)
+
+### Advantages of k-means
+- Simple
+- Scalable
+- Converges
+- Warm-starting of centroid positions
+- Adapts to new examples
+- Generalised to clusters of different shapes and sizes e.g. elliptical clusters
+
+### Disadvantages
+- k must be chosen manually
+- Results depend on initial values
+- Difficulty clustering data of varying sizes and densities without generalisation
+- Difficulty clustering outliers
+- Difficulty scaling with number of dimensions
+
+### Curse of dimensionality and spectral clustering
+- As dimensions increase, the standard deviation in distance between examples shrinks 
+- Solution: spectral clustering
+  - Reduce dimensionality of feature data by PCA
+  - Project all data points into lower-dimensional subspace
+  - Cluster data in subspace using chosen algorithm
+ 
+---
+
+## Supervised similarity measure
